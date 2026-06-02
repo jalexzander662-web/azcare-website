@@ -2,3 +2,8 @@
 .gitignore
 .dockerignore
 Dockerfile
+
+# Secrets — never bake into the public image
+.mcp.json
+.env*
+.claude/

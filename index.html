@@ -1182,17 +1182,36 @@ function animCount(el,target,suffix){
 // Booking modal
 function openBookModal(){document.getElementById('bookModal').classList.add('open');document.body.style.overflow='hidden';}
 function closeBookModal(){document.getElementById('bookModal').classList.remove('open');document.body.style.overflow='';}
+// Supabase — store booking submissions
+const SUPABASE_URL='https://uzzuzrtpkhspcbuxpuqz.supabase.co';
+const SUPABASE_KEY='sb_publishable_HKc_zz_wltr30ZLOr1Z12Q_4zqNPW3U';
+async function saveBooking(form,source){
+  const f=new FormData(form);
+  const row={
+    name:f.get('name'),phone:f.get('phone'),service:f.get('service'),
+    area:f.get('area'),preferred_time:f.get('preferred_time'),
+    message:f.get('message'),source:source
+  };
+  const res=await fetch(SUPABASE_URL+'/rest/v1/bookings',{
+    method:'POST',
+    headers:{
+      'apikey':SUPABASE_KEY,
+      'Authorization':'Bearer '+SUPABASE_KEY,
+      'Content-Type':'application/json',
+      'Prefer':'return=minimal'
+    },
+    body:JSON.stringify(row)
+  });
+  if(!res.ok)throw new Error('insert failed: '+res.status);
+}
+
 const _bmf=document.getElementById('bookModalForm');
 if(_bmf)_bmf.addEventListener('submit',async function(e){
   e.preventDefault();
   const btn=this.querySelector('button[type="submit"]');
   btn.disabled=true;btn.textContent='Sending...';
-  const data=new FormData(this);
-  data.append('_subject','New Booking Request — AZ Care.pk');
-  data.append('_captcha','false');
-  data.append('_template','box');
   try{
-    await fetch('https://formsubmit.co/ajax/techhims5@gmail.com',{method:'POST',headers:{'Accept':'application/json'},body:data});
+    await saveBooking(this,'book_modal');
     this.style.display='none';
     document.getElementById('bookModalOk').style.display='block';
   }catch(err){
@@ -1281,12 +1300,8 @@ if(_bf)_bf.addEventListener('submit',async function(e){
   e.preventDefault();
   const btn=this.querySelector('button[type="submit"]');
   btn.disabled=true;btn.textContent='Sending...';
-  const data=new FormData(this);
-  data.append('_subject','New Booking Request — AZ Care.pk');
-  data.append('_captcha','false');
-  data.append('_template','box');
   try{
-    await fetch('https://formsubmit.co/ajax/techhims5@gmail.com',{method:'POST',headers:{'Accept':'application/json'},body:data});
+    await saveBooking(this,'contact_form');
     this.style.display='none';
     document.getElementById('formOk').style.display='block';
   }catch(err){
