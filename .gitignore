@@ -1,7 +1,10 @@
 node_modules/
+dist/
 .DS_Store
 Thumbs.db
 .claude/
+.env
+.env.local
 
 # Contains Hostinger API token - never commit
 .mcp.json
