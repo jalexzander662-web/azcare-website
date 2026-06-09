@@ -24,7 +24,7 @@ export default function Nav({ onBookClick, onPageNav }) {
     <>
       <nav id="mainNav" className={scrolled ? 'scrolled' : ''}>
         <a className="logo-wrap" href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }} aria-label="Go to home">
-          <img src="/AZ CARE Website Logo.png" alt="AZ Care.pk Logo" className="logo-img" style={{height:'52px'}} />
+          <img src="/AZ CARE Website Logo.webp" alt="AZ Care.pk Logo" className="logo-img" style={{height:'52px'}} />
         </a>
         <ul className="nav-links">
           <li><a href="#services" onClick={(e) => { e.preventDefault(); handleNavLink('cleaning'); }}>Cleaning</a></li>

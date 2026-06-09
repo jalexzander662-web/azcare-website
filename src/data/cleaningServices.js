@@ -1,7 +1,7 @@
 export const cleaningServices = [
   {
     name: 'Sofa Cleaning',
-    img: '/inphosy cleaning.png',
+    img: '/inphosy cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Deep steam or dry cleaning for all sofa types. Anti-bacterial treatment included.',
     price: 'Rs. 250 / Seat',
@@ -17,7 +17,7 @@ export const cleaningServices = [
   },
   {
     name: 'Carpet Cleaning',
-    img: '/Floor cleaning.png',
+    img: '/Floor cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Hot water extraction removes deep-set dirt and allergens from all carpet types.',
     price: 'Rs. 18 / Sq Ft',
@@ -33,7 +33,7 @@ export const cleaningServices = [
   },
   {
     name: 'Rug Cleaning',
-    img: '/Tile & Grout Cleaning.png',
+    img: '/Tile & Grout Cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Professional machine and hand cleaning for all rug types including Persian and Turkish.',
     price: 'Rs. 18 / Sq Ft',
@@ -49,7 +49,7 @@ export const cleaningServices = [
   },
   {
     name: 'Upholstery Cleaning',
-    img: '/inphosy cleaning.png',
+    img: '/inphosy cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Deep cleaning for all cushioned furniture — dining chairs, office seats and sofas.',
     price: 'Rs. 250 / Seat',
@@ -65,7 +65,7 @@ export const cleaningServices = [
   },
   {
     name: 'Mattress Cleaning',
-    img: '/Mattress cleaning.png',
+    img: '/Mattress cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'UV anti-bacterial treatment kills germs. Steam cleaning removes dust mites and allergens.',
     price: 'King Rs. 2,200 | Queen Rs. 1,700 | Single Rs. 1,300',
@@ -81,7 +81,7 @@ export const cleaningServices = [
   },
   {
     name: 'Curtain Cleaning',
-    img: '/Cartin cleaning.png',
+    img: '/Cartin cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'On-site or off-site curtain washing. Safe for all fabric types including delicates.',
     price: 'Rs. 18 / Sq Ft',
@@ -97,7 +97,7 @@ export const cleaningServices = [
   },
   {
     name: 'Solar Panel Cleaning',
-    img: '/Solar image.png',
+    img: '/Solar image.webp',
     cat: 'Cleaning Services',
     desc: 'Removes Karachi dust, grime and bird droppings. Maximizes solar energy output.',
     price: 'Rs. 200 / Panel',
@@ -113,7 +113,7 @@ export const cleaningServices = [
   },
   {
     name: 'Kitchen Cleaning',
-    img: '/Kitchen Cleaning.png',
+    img: '/Kitchen Cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Deep degreasing of hobs, chimneys and tiles. All appliances inside and outside cleaned.',
     price: 'Starting Rs. 3,500',
@@ -129,7 +129,7 @@ export const cleaningServices = [
   },
   {
     name: 'Washroom Cleaning',
-    img: '/Office cleaning.png',
+    img: '/Office cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Complete washroom deep clean from top to bottom. Tiles and grout steam cleaned.',
     price: 'Starting Rs. 3,000',
@@ -145,7 +145,7 @@ export const cleaningServices = [
   },
   {
     name: 'Office Cleaning',
-    img: '/Office cleaning.png',
+    img: '/Office cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Regular or one-time office deep cleaning. Flexible scheduling including after hours.',
     price: 'Rs. 20 / Sq Ft',
@@ -161,7 +161,7 @@ export const cleaningServices = [
   },
   {
     name: 'Floor Cleaning',
-    img: '/Floor cleaning.png',
+    img: '/Floor cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Deep cleaning of all floor types. Machine scrubbing removes embedded dirt and stains.',
     price: 'Rs. 20 / Sq Ft',
@@ -177,7 +177,7 @@ export const cleaningServices = [
   },
   {
     name: 'Whole House Deep Cleaning',
-    img: '/Whole house deep cleaning.png',
+    img: '/Whole house deep cleaning.webp',
     cat: 'Cleaning Services',
     desc: 'Complete deep cleaning of your entire home in one day. Professional team of 4–6 staff.',
     price: 'Starting Rs. 25,000',
@@ -193,7 +193,7 @@ export const cleaningServices = [
   },
   {
     name: 'Fumigation',
-    img: '/Fumigation.png',
+    img: '/Fumigation.webp',
     cat: 'Cleaning Services',
     desc: 'Eliminates cockroaches, ants, mosquitoes and all pests. Safe for family and pets.',
     price: 'Starting Rs. 5,000',

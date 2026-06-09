@@ -1,9 +1,9 @@
 const trustItems = [
-  { img: '/LOGOS/Verified Staff.png', title: 'Verified Staff', sub: 'Background checked professionals' },
-  { img: '/LOGOS/Eco-Friendly.png', title: 'Eco-Friendly', sub: 'Safe for kids & pets' },
-  { img: '/LOGOS/Punctual.jpg', title: 'Punctual', sub: 'Always on time' },
-  { img: '/LOGOS/Satisfaction Guarantee.jpg', title: 'Satisfaction Guarantee', sub: 'Free redo if not satisfied' },
-  { img: '/LOGOS/No Hidden Charges.jpg', title: 'No Hidden Charges', sub: 'Transparent pricing' },
+  { img: '/LOGOS/Verified Staff.webp', title: 'Verified Staff', sub: 'Background checked professionals' },
+  { img: '/LOGOS/Eco-Friendly.webp', title: 'Eco-Friendly', sub: 'Safe for kids & pets' },
+  { img: '/LOGOS/Punctual.webp', title: 'Punctual', sub: 'Always on time' },
+  { img: '/LOGOS/Satisfaction Guarantee.webp', title: 'Satisfaction Guarantee', sub: 'Free redo if not satisfied' },
+  { img: '/LOGOS/No Hidden Charges.webp', title: 'No Hidden Charges', sub: 'Transparent pricing' },
 ];
 
 export default function TrustStrip() {

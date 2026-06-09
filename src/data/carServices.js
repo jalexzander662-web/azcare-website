@@ -1,7 +1,7 @@
 export const carServices = [
   {
     name: 'Car Wash',
-    img: '/Car Detailing/Car Wash.png',
+    img: '/Car Detailing/Car Wash.webp',
     cat: 'Car Detailing',
     desc: 'High-pressure foam gun exterior wash. Streak-free, showroom-quality finish guaranteed.',
     price: 'Starting Rs. 800',
@@ -17,7 +17,7 @@ export const carServices = [
   },
   {
     name: 'Complete Interior Cleaning',
-    img: '/Car Detailing/interior cleaning.png',
+    img: '/Car Detailing/interior cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Complete package: Carpet cleaning, Dashboard cleaning & Interior polishing in one price.',
     price: 'Starting Rs. 2,000',
@@ -33,7 +33,7 @@ export const carServices = [
   },
   {
     name: 'Carpet/Floor Mats Cleaning',
-    img: '/Car Detailing/Car carpet cleaning.png',
+    img: '/Car Detailing/Car carpet cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Hot water extraction removes embedded dirt. Allergens and bacteria eliminated.',
     price: 'Starting Rs. 700',
@@ -49,7 +49,7 @@ export const carServices = [
   },
   {
     name: 'Seat Cleaning',
-    img: '/Car Detailing/Seat Cleaning.png',
+    img: '/Car Detailing/Seat Cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Deep cleaning for fabric and leather seats. Anti-bacterial sanitization for hygiene.',
     price: 'Rs. 300 / Seat',
@@ -65,7 +65,7 @@ export const carServices = [
   },
   {
     name: 'Dashboard Cleaning',
-    img: '/Car Detailing/Dashboard Cleaning.png',
+    img: '/Car Detailing/Dashboard Cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Complete dashboard wipe-down. UV-protective dressing applied to all plastics.',
     price: 'Starting Rs. 700',
@@ -81,7 +81,7 @@ export const carServices = [
   },
   {
     name: 'Interior Polishing',
-    img: '/Car Detailing/Interior polish.png',
+    img: '/Car Detailing/Interior polish.webp',
     cat: 'Car Detailing',
     desc: 'All interior plastics and trims polished. Anti-static treatment prevents future dust.',
     price: 'Starting Rs. 700',
@@ -97,7 +97,7 @@ export const carServices = [
   },
   {
     name: 'Roof Cleaning',
-    img: '/Car Detailing/Roof Cleaning.png',
+    img: '/Car Detailing/Roof Cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Exterior car roof washed. Interior headliner cleaned and refreshed. Odor eliminated.',
     price: 'Starting Rs. 700',
@@ -113,7 +113,7 @@ export const carServices = [
   },
   {
     name: 'Engine Cleaning & Dressing',
-    img: '/Car Detailing/Engine Cleaning & Dressing.png',
+    img: '/Car Detailing/Engine Cleaning & Dressing.webp',
     cat: 'Car Detailing',
     desc: 'Safe engine bay degreasing and washing. Engine dressing for shine and protection.',
     price: 'Starting Rs. 1,000',
@@ -129,7 +129,7 @@ export const carServices = [
   },
   {
     name: 'Front & Backlight Restoration',
-    img: '/Car Detailing/Front & Backlight Buffing.png',
+    img: '/Car Detailing/Front & Backlight Buffing.webp',
     cat: 'Car Detailing',
     desc: 'Removes yellowing and UV oxidation. Restores crystal-clear light transparency.',
     price: 'Starting Rs. 700',
@@ -145,7 +145,7 @@ export const carServices = [
   },
   {
     name: 'Trunk Cleaning',
-    img: '/Car Detailing/Trunk Cleaning.png',
+    img: '/Car Detailing/Trunk Cleaning.webp',
     cat: 'Car Detailing',
     desc: 'Full trunk vacuum and deep cleaning. Leaves trunk fresh and completely odor-free.',
     price: 'Starting Rs. 700',
@@ -161,7 +161,7 @@ export const carServices = [
   },
   {
     name: 'Compound Polish',
-    img: '/Car Detailing/Compound Polish.png',
+    img: '/Car Detailing/Compound Polish.webp',
     cat: 'Car Detailing',
     desc: 'Machine compound polish removes swirl marks. Restores paint depth, gloss and clarity.',
     price: 'Starting Rs. 1,200',
@@ -177,7 +177,7 @@ export const carServices = [
   },
   {
     name: 'Colour Enhance',
-    img: '/Car Detailing/Colour Enhance.png',
+    img: '/Car Detailing/Colour Enhance.webp',
     cat: 'Car Detailing',
     desc: 'Deepens and enriches your car original colour. Showroom-worthy colour gloss restored.',
     price: 'Starting Rs. 1,200',
@@ -193,7 +193,7 @@ export const carServices = [
   },
   {
     name: 'Ceramic Wax',
-    img: '/Car Detailing/Ceramic Wax.png',
+    img: '/Car Detailing/Ceramic Wax.webp',
     cat: 'Car Detailing',
     desc: 'Premium ceramic wax coating. UV protection prevents paint fading. Lasts 6–12 months.',
     price: 'Starting Rs. 1,000',
@@ -209,7 +209,7 @@ export const carServices = [
   },
   {
     name: 'Tire Cleaning & Dressing',
-    img: '/Car Detailing/Tire Cleaning & Dressing.png',
+    img: '/Car Detailing/Tire Cleaning & Dressing.webp',
     cat: 'Car Detailing',
     desc: 'All 4 tyres deep cleaned. Tyre dressing for deep black finish. Rim cleaning included.',
     price: 'Starting Rs. 500',

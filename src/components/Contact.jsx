@@ -18,12 +18,12 @@ async function saveBooking(data, source) {
 }
 
 const contactItems = [
-  { href: 'https://wa.me/923222468123?text=Hello%20AZ%20Care%20Assalam%20o%20Alaikum!%20Mujhe%20cleaning%20service%20chahiye.', img: '/LOGOS/whatsapp.jpg', lbl: 'WhatsApp (Fastest)', val: '0322-2468123', external: true },
-  { href: 'tel:03222468123', img: '/LOGOS/phone.jpg', lbl: 'Call Us', val: '0322-2468123', external: false },
-  { href: 'https://www.facebook.com/azcare.pk', img: '/LOGOS/facebook.jpg', lbl: 'Facebook Page', val: 'AZ Care.pk', external: true },
-  { href: 'https://www.instagram.com/azcare.pk?igsh=MWlheXkzcjVpNm1zdQ==', img: '/LOGOS/instagram.jpg', lbl: 'Instagram', val: '@azcare.pk', external: true },
-  { href: 'mailto:azcarepk@gmail.com', img: '/LOGOS/mail.png', lbl: 'Email Us', val: 'azcarepk@gmail.com', external: false },
-  { href: 'https://www.google.com/maps?q=24.9172661,67.0307852&z=17&hl=en', img: '/LOGOS/location.jpg', lbl: 'Location', val: 'Karachi, Pakistan', external: true },
+  { href: 'https://wa.me/923222468123?text=Hello%20AZ%20Care%20Assalam%20o%20Alaikum!%20Mujhe%20cleaning%20service%20chahiye.', img: '/LOGOS/whatsapp.webp', lbl: 'WhatsApp (Fastest)', val: '0322-2468123', external: true },
+  { href: 'tel:03222468123', img: '/LOGOS/phone.webp', lbl: 'Call Us', val: '0322-2468123', external: false },
+  { href: 'https://www.facebook.com/azcare.pk', img: '/LOGOS/facebook.webp', lbl: 'Facebook Page', val: 'AZ Care.pk', external: true },
+  { href: 'https://www.instagram.com/azcare.pk?igsh=MWlheXkzcjVpNm1zdQ==', img: '/LOGOS/instagram.webp', lbl: 'Instagram', val: '@azcare.pk', external: true },
+  { href: 'mailto:azcarepk@gmail.com', img: '/LOGOS/mail.webp', lbl: 'Email Us', val: 'azcarepk@gmail.com', external: false },
+  { href: 'https://www.google.com/maps?q=24.9172661,67.0307852&z=17&hl=en', img: '/LOGOS/location.webp', lbl: 'Location', val: 'Karachi, Pakistan', external: true },
 ];
 
 const serviceOptions = [
@@ -57,7 +57,7 @@ export default function Contact() {
         <div className="sec-inner">
           <div className="sec-head center rv">
             <div className="sec-tag">Book a Service</div>
-            <img src="/AZ CARE Website Logo.png" alt="AZ Care Logo" style={{height:'60px',width:'auto',display:'block',margin:'0 auto 1rem',objectFit:'contain',background:'#0b1e3d',padding:'8px',borderRadius:'14px'}} />
+            <img src="/AZ CARE Website Logo.webp" alt="AZ Care Logo" style={{height:'60px',width:'auto',display:'block',margin:'0 auto 1rem',objectFit:'contain',background:'#0b1e3d',padding:'8px',borderRadius:'14px'}} />
             <h2 className="sec-title">Contact <em>AZ Care</em> Today</h2>
             <p className="sec-sub">Reach us via WhatsApp, phone or form. We respond fast — 7 days a week.</p>
           </div>

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { faqs } from '../data/faqs';
 
 const feats = [
-  { img: '/LOGOS/Eco-Friendly.png', title: 'Eco-Friendly Products', desc: 'Hospital-grade, non-toxic — 100% safe for babies, children, pets and elders.' },
-  { img: '/LOGOS/Fast & Reliable.jpg', title: 'Fast & Reliable', desc: 'Punctual arrival, efficient cleaning, zero mess left. We respect your time always.' },
-  { img: '/LOGOS/Verified Staff.png', title: 'Trained & Verified Staff', desc: 'Background-checked, uniformed professionals trained for every surface and material.' },
-  { img: '/LOGOS/No Hidden Charges.jpg', title: 'Honest Pricing', desc: 'Affordable rates, free quotes, zero hidden charges. Pay only what you agreed to.' },
+  { img: '/LOGOS/Eco-Friendly.webp', title: 'Eco-Friendly Products', desc: 'Hospital-grade, non-toxic — 100% safe for babies, children, pets and elders.' },
+  { img: '/LOGOS/Fast & Reliable.webp', title: 'Fast & Reliable', desc: 'Punctual arrival, efficient cleaning, zero mess left. We respect your time always.' },
+  { img: '/LOGOS/Verified Staff.webp', title: 'Trained & Verified Staff', desc: 'Background-checked, uniformed professionals trained for every surface and material.' },
+  { img: '/LOGOS/No Hidden Charges.webp', title: 'Honest Pricing', desc: 'Affordable rates, free quotes, zero hidden charges. Pay only what you agreed to.' },
 ];
 
 export default function WhyUs() {

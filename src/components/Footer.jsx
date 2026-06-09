@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="footer-top">
         <div className="ft-brand">
           <div className="logo-wrap">
-            <img src="/AZ CARE Website Logo.png" alt="AZ Care.pk Logo" className="logo-img" style={{height:'52px'}} />
+            <img src="/AZ CARE Website Logo.webp" alt="AZ Care.pk Logo" className="logo-img" style={{height:'52px'}} />
           </div>
           <p>Karachi ka #1 professional cleaning company. Eco-friendly, trusted, guaranteed.</p>
           <span className="ft-tagline">"Where Cleanliness Meets Perfection"</span>

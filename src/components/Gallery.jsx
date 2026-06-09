@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 
 const slides = [
-  { img: '/Sofa befor & after.png', label: 'Sofa Cleaning — Before & After' },
-  { img: '/office before after.png', label: 'Office Cleaning — Before & After' },
-  { img: '/Mattres Befor & after.jpg', label: 'Mattress Cleaning — Before & After' },
-  { img: '/Car befor & after.jpg', label: 'Car Cleaning — Before & After' },
+  { img: '/Sofa befor & after.webp', label: 'Sofa Cleaning — Before & After' },
+  { img: '/office before after.webp', label: 'Office Cleaning — Before & After' },
+  { img: '/Mattres Befor & after.webp', label: 'Mattress Cleaning — Before & After' },
+  { img: '/Car befor & after.webp', label: 'Car Cleaning — Before & After' },
 ];
 
 export default function Gallery() {

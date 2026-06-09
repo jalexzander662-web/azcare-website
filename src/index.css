@@ -49,7 +49,7 @@ nav.scrolled{top:0;background:rgba(6,15,30,.97);backdrop-filter:blur(24px);box-s
 
 /* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem 3rem;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 90% 70% at 50% 20%,rgba(30,144,255,.18) 0%,transparent 65%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(0,100,200,.1) 0%,transparent 60%),linear-gradient(rgba(6,15,30,.78),rgba(6,15,30,.78)),url("/Website Cover.png") center 60%/cover no-repeat}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 90% 70% at 50% 20%,rgba(30,144,255,.18) 0%,transparent 65%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(0,100,200,.1) 0%,transparent 60%),linear-gradient(rgba(6,15,30,.78),rgba(6,15,30,.78)),url("/Website Cover.webp") center 60%/cover no-repeat}
 .hero-bg::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231e90ff' fill-opacity='0.035'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/svg%3E")}
 .hero-inner{position:relative;z-index:2;max-width:960px;margin:16rem auto 0}
 .hero-tagline-top{display:inline-flex;align-items:center;gap:.6rem;background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.25);color:var(--acc3);padding:.4rem 1.2rem;border-radius:50px;font-family:var(--font-sub);font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.8rem;animation:fadeInDown .8s ease both}
