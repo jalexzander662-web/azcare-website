@@ -32,7 +32,7 @@ export default function Gallery() {
             <div className="ba-slider-track" style={{transform:`translateX(-${cur * 100}%)`}}>
               {slides.map((s, i) => (
                 <div className="ba-slide" key={i}>
-                  <img src={s.img} alt={s.label} />
+                  <img src={s.img} alt={s.label} loading="lazy" decoding="async" />
                   <div className="ba-slide-label">{s.label}</div>
                 </div>
               ))}

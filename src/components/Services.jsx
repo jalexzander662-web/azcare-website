@@ -24,7 +24,7 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
               {cleaningServices.map((s) => (
                 <div key={s.name} className="srv-card rv" style={{cursor:'pointer'}} onClick={() => onDetailOpen(s, 'AZ Care.pk — Professional Cleaning Services')}>
                   <div className="srv-img">
-                    <img src={s.img} alt={s.name} />
+                    <img src={s.img} alt={s.name} loading="lazy" decoding="async" />
                     <div className="srv-overlay">
                       <div>
                         <span className="srv-cat">{s.cat}</span>
@@ -49,7 +49,7 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
               {carServices.map((s) => (
                 <div key={s.name} className="srv-card rv" style={{cursor:'pointer'}} onClick={() => onDetailOpen(s, 'AZ Care.pk — Professional Car Detailing')}>
                   <div className="srv-img">
-                    <img src={s.img} alt={s.name} />
+                    <img src={s.img} alt={s.name} loading="lazy" decoding="async" />
                     <div className="srv-overlay">
                       <div>
                         <span className="srv-cat">{s.cat}</span>
@@ -74,7 +74,7 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
               {products.map((p) => (
                 <div key={p.name} className="prod-card rv">
                   <div className="prod-img">
-                    <img src={p.img} alt={p.name} />
+                    <img src={p.img} alt={p.name} loading="lazy" decoding="async" />
                   </div>
                   <div className="prod-body">
                     <div className="prod-name">{p.name}</div>

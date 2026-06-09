@@ -26,7 +26,7 @@ export default function WhyUs() {
                 {feats.map((f) => (
                   <div className="feat" key={f.title}>
                     <div className="feat-ico" style={{overflow:'hidden'}}>
-                      <img src={f.img} alt={f.title} style={{width:'100%',height:'100%',objectFit:'contain'}} />
+                      <img src={f.img} alt={f.title} loading="lazy" decoding="async" style={{width:'100%',height:'100%',objectFit:'contain'}} />
                     </div>
                     <div>
                       <h4>{f.title}</h4>

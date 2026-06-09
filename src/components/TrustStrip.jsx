@@ -13,7 +13,7 @@ export default function TrustStrip() {
         {trustItems.map((item) => (
           <div className="titem rv" key={item.title}>
             <div className="titem-icon">
-              <img src={item.img} alt={item.title} />
+              <img src={item.img} alt={item.title} loading="lazy" decoding="async" />
             </div>
             <div className="titem-text">
               <strong>{item.title}</strong>

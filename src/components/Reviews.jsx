@@ -16,7 +16,7 @@ export default function Reviews() {
                 <div className="stars">★★★★★</div>
                 <p className="rev-text">{r.text}</p>
                 <div className="rev-author">
-                  <div className="rev-av"><img src={r.img} alt={r.name} /></div>
+                  <div className="rev-av"><img src={r.img} alt={r.name} loading="lazy" decoding="async" /></div>
                   <div>
                     <div className="rev-name">{r.name}</div>
                     <div className="rev-loc">{r.loc}</div>
