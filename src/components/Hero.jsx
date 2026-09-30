@@ -11,7 +11,7 @@ function animCount(el, target, suffix) {
   }, 16);
 }
 
-export default function Hero({ onBookClick }) {
+export default function Hero({ onBookClick, onExploreProducts }) {
   const statsRef = useRef(null);
 
   useEffect(() => {
@@ -30,18 +30,32 @@ export default function Hero({ onBookClick }) {
     <section className="hero">
       <div className="hero-bg"></div>
       <div className="hero-inner">
-        <div className="hero-tagline-top">Karachi ka Bharosa · AZ Care.pk · 6 Years Experience</div>
+        <div className="hero-tagline-top">Pakistan ka Bharosa · AZ Care.pk · 6 Years Experience</div>
         <h1>
           <span className="line-main">PROFESSIONAL CLEANING</span>
-          <span className="line-accent">SERVICES IN KARACHI</span>
+          <span className="line-accent">SERVICES IN Pakistan</span>
         </h1>
         <div className="hero-subhead">Safai Aisi Jo Nazar Aaye</div>
-        <div className="hero-trust-line">Karachi Walon Ki Pehli Choice</div>
+        <div className="hero-trust-line">Pakistan Walon Ki Pehli Choice</div>
         <div className="hero-where-line">"Where Cleanliness Meets Perfection"</div>
+        
+        {/* Hero 3 Action Buttons */}
         <div className="hero-btns">
-          <button className="btn-hero-primary" onClick={onBookClick}>BOOK YOUR SERVICE NOW</button>
-          <a href="#services" className="btn-hero-secondary">Explore Services →</a>
+          <button className="btn-hero-primary" onClick={onBookClick}>
+            BOOK YOUR SERVICE NOW
+          </button>
+          <a href="#services" className="btn-hero-secondary">
+            Explore Services →
+          </a>
+          <button 
+            className="btn-hero-secondary" 
+            onClick={onExploreProducts}
+            style={{ cursor: 'pointer' }}
+          >
+            Products →
+          </button>
         </div>
+
         <div className="hero-stats" ref={statsRef}>
           <div className="hstat"><span className="hstat-num" data-t="10000">0</span><span className="hstat-lbl">Cleaning Jobs Done</span></div>
           <div className="hstat-div"></div>

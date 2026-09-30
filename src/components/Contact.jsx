@@ -1,21 +1,6 @@
 import { useState } from 'react';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-async function saveBooking(data, source) {
-  const res = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal',
-    },
-    body: JSON.stringify({ ...data, source }),
-  });
-  if (!res.ok) throw new Error('insert failed: ' + res.status);
-}
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLU7x56fRc5YBnca91B4JOPneelUS2ruD1JFX8Nyk4vclCyzd69AjeXqXtgY5WxhUh/exec';
 
 const contactItems = [
   { href: 'https://wa.me/923222468123?text=Hello%20AZ%20Care%20Assalam%20o%20Alaikum!%20Mujhe%20cleaning%20service%20chahiye.', img: '/LOGOS/whatsapp.webp', lbl: 'WhatsApp (Fastest)', val: '0322-2468123', external: true },
@@ -42,12 +27,30 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
+
+    const payload = {
+      action: 'createBooking',
+      name: form.name,
+      phone: form.phone,
+      service: form.service,
+      area: form.area,
+      preferred_time: form.preferred_time,
+      message: form.message
+    };
+
     try {
-      await saveBooking(form, 'contact_form');
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
       setDone(true);
-    } catch {
-      setSending(false);
+    } catch (err) {
+      console.error('Booking submission failed:', err);
       alert('Request send nahi ho saka. Please WhatsApp ya phone se contact karein: 0322-2468123');
+    } finally {
+      setSending(false);
     }
   };
 
@@ -74,38 +77,6 @@ export default function Contact() {
                     </div>
                   </a>
                 ))}
-                <a href="https://www.google.com/search?q=AZ+Care.pk" target="_blank" rel="noreferrer" className="c-item">
-                  <div className="c-ico" style={{background:'#fff',padding:'6px',borderRadius:'50%',width:'46px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 3px 12px rgba(0,0,0,.3)'}}>
-                    <i className="fa-brands fa-google" style={{fontSize:'1.35rem',background:'linear-gradient(135deg,#4285F4,#EA4335,#FBBC05,#34A853)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}></i>
-                  </div>
-                  <div>
-                    <div className="c-lbl">Google Business</div>
-                    <div className="c-val">Rate &amp; Review Us ⭐</div>
-                  </div>
-                </a>
-                <a href="https://www.youtube.com/@azcarepk" target="_blank" rel="noreferrer" className="c-item">
-                  <div className="c-ico" style={{background:'#fff',padding:'6px',borderRadius:'50%',width:'46px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 3px 12px rgba(0,0,0,.3)'}}>
-                    <i className="fa-brands fa-youtube" style={{fontSize:'1.45rem',color:'#FF0000'}}></i>
-                  </div>
-                  <div>
-                    <div className="c-lbl">YouTube Channel</div>
-                    <div className="c-val">@azcarepk</div>
-                  </div>
-                </a>
-                <a href="https://www.tiktok.com/@azcarepk?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="c-item">
-                  <div style={{background:'#010101',padding:'6px',borderRadius:'50%',width:'46px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 3px 12px rgba(0,0,0,.3)',flexShrink:0}}>
-                    <i className="fa-brands fa-tiktok" style={{fontSize:'1.35rem',color:'#fff'}}></i>
-                  </div>
-                  <div>
-                    <div className="c-lbl">TikTok</div>
-                    <div className="c-val">@azcarepk</div>
-                  </div>
-                </a>
-              </div>
-              <div className="hours-card">
-                <h4>Working Hours</h4>
-                <div className="hours-row"><span>All Days</span><span>24 / 7</span></div>
-                <span className="emergency">✅ Available anytime — Book on WhatsApp</span>
               </div>
             </div>
 
@@ -127,7 +98,7 @@ export default function Contact() {
                   </div>
                   <div className="fg"><label>Your Area in Karachi</label><input type="text" name="area" placeholder="e.g. DHA, Gulshan, Clifton, PECHS..." value={form.area} onChange={handleChange} /></div>
                   <div className="fg"><label>Preferred Date &amp; Time</label><input type="text" name="preferred_time" placeholder="e.g. Kal subah, Saturday afternoon..." value={form.preferred_time} onChange={handleChange} /></div>
-                  <div className="fg"><label>Message (Optional)</label><textarea name="message" placeholder="Koi additional details yahan likhein..." value={form.message} onChange={handleChange}></textarea></div>
+                  <div className="fg"><label>Address / Message (Optional)</label><textarea name="message" placeholder="Ghar ka address ya koi details yahan likhein..." value={form.message} onChange={handleChange}></textarea></div>
                   <button type="submit" className="btn-submit" disabled={sending}>{sending ? 'Sending...' : 'SEND BOOKING REQUEST ✉'}</button>
                 </form>
               )}

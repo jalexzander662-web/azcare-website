@@ -1,8 +1,15 @@
 import { cleaningServices } from '../data/cleaningServices';
 import { carServices } from '../data/carServices';
-import { products } from '../data/products';
 
-export default function Services({ activePage, onPageChange, onDetailOpen }) {
+export default function Services({
+  activePage,
+  onPageChange,
+  onDetailOpen,
+  onBookService,
+  sheetProducts = [],
+  loadingProducts,
+  onAddToCart,
+}) {
   return (
     <div id="services" className="services-bg">
       <div className="sec">
@@ -19,6 +26,7 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
             <button className={`page-tab${activePage === 'products' ? ' active' : ''}`} onClick={() => onPageChange('products')}>Shop / Products</button>
           </div>
 
+          {/* Cleaning Services Section */}
           <div id="spage-cleaning" className={`svc-page${activePage === 'cleaning' ? ' active' : ''}`}>
             <div className="srv-grid">
               {cleaningServices.map((s) => (
@@ -35,15 +43,26 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
                   <div className="srv-body">
                     <p>{s.desc}</p>
                     <div className="card-price">{s.price}</div>
-                    <a href={`https://wa.me/923222468123?text=${s.wa}`} target="_blank" rel="noreferrer" className="srv-book" onClick={e => e.stopPropagation()}>
+                    <button 
+                      className="srv-book" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onBookService) {
+                          onBookService(s.name);
+                        } else {
+                          onDetailOpen(s, 'AZ Care.pk — Professional Cleaning Services');
+                        }
+                      }}
+                    >
                       BOOK NOW →
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Car Detailing Services Section */}
           <div id="spage-car" className={`svc-page${activePage === 'car' ? ' active' : ''}`}>
             <div className="srv-grid">
               {carServices.map((s) => (
@@ -60,33 +79,72 @@ export default function Services({ activePage, onPageChange, onDetailOpen }) {
                   <div className="srv-body">
                     <p>{s.desc}</p>
                     <div className="card-price">{s.price}</div>
-                    <a href={`https://wa.me/923222468123?text=${s.wa}`} target="_blank" rel="noreferrer" className="srv-book" onClick={e => e.stopPropagation()}>
+                    <button 
+                      className="srv-book" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onBookService) {
+                          onBookService(s.name);
+                        } else {
+                          onDetailOpen(s, 'AZ Care.pk — Professional Car Detailing');
+                        }
+                      }}
+                    >
                       BOOK NOW →
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Dynamic Google Sheet Products Tab */}
           <div id="spage-products" className={`svc-page${activePage === 'products' ? ' active' : ''}`}>
-            <div className="prod-grid">
-              {products.map((p) => (
-                <div key={p.name} className="prod-card rv">
-                  <div className="prod-img">
-                    <img src={p.img} alt={p.name} loading="lazy" decoding="async" />
+            {loadingProducts ? (
+              <div style={{ textAlign: 'center', padding: '50px 20px', color: '#7a90b5', fontSize: '1.1rem' }}>
+                ⏳ Loading live products...
+              </div>
+            ) : sheetProducts.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '40px 20px', color: '#7a90b5' }}>
+                No products found in Google Sheet.
+              </div>
+            ) : (
+              <div className="prod-grid">
+                {sheetProducts.map((p) => (
+                  <div key={p.id || p.name} className="prod-card rv">
+                    <div className="prod-img">
+                      <img src={p.image} alt={p.name} loading="lazy" decoding="async" />
+                    </div>
+                    <div className="prod-body">
+                      <div className="prod-name">{p.name}</div>
+                      <div className="prod-price">
+                        {String(p.price).startsWith('Rs') ? p.price : `Rs. ${p.price}`}
+                      </div>
+                      <button
+                        onClick={() => onAddToCart(p)}
+                        className="prod-buy"
+                        style={{
+                          width: '100%',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          background: 'linear-gradient(135deg, var(--acc), var(--acc2))',
+                          color: '#fff',
+                          border: 'none',
+                          marginTop: 'auto',
+                          padding: '10px 14px',
+                          borderRadius: '25px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        🛒 ADD TO CART
+                      </button>
+                    </div>
                   </div>
-                  <div className="prod-body">
-                    <div className="prod-name">{p.name}</div>
-                    <div className="prod-price">{p.price}</div>
-                    <a href={`https://wa.me/923222468123?text=${p.wa}`} target="_blank" rel="noreferrer" className="prod-buy">
-                      <i className="fa-brands fa-whatsapp"></i> ORDER NOW
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
+
         </div>
       </div>
     </div>
