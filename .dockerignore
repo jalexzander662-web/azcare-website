@@ -7,3 +7,22 @@ Dockerfile
 .mcp.json
 .env*
 .claude/
+.remember/
+.playwright-mcp/
+
+# Source material + tooling that must not reach the build context (public/ already holds the web-ready assets)
+/*.png
+/*.jpg
+/*.mp4
+Car Detailing
+Human faces
+LOGOS
+Sale products
+node_modules
+dist
+tests
+test-results
+playwright-report
+blob-report
+design-src
+tools

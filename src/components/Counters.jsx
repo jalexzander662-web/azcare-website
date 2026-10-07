@@ -1,54 +1,31 @@
-import { useEffect, useRef } from 'react';
-
-function animCount(el, target, suffix) {
-  const dur = 2200;
-  const step = (target / dur) * 16;
-  let cur = 0;
-  const t = setInterval(() => {
-    cur += step;
-    if (cur >= target) { cur = target; clearInterval(t); }
-    el.textContent = (target >= 1000 ? Math.floor(cur).toLocaleString() : Math.floor(cur)) + suffix;
-  }, 16);
-}
-
-const counters = [
-  { t: 10000, label: 'Cleaning Jobs Done' },
-  { t: 5000, label: 'Happy Customers' },
-  { t: 11, label: 'Services Offered' },
-  { t: 6, label: 'Years Experience' },
-];
+import { useRef, useState } from 'react'
+import Section from '../ds/Section'
+import StatCounter from '../ds/StatCounter'
+import { COUNTERS } from '../data/site'
+import { reducedMotion } from '../lib/motion'
+import { useInView } from '../hooks/useReveal'
 
 export default function Counters() {
-  const ref = useRef(null);
-  const animated = useRef(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting && !animated.current) {
-          animated.current = true;
-          ref.current?.querySelectorAll('[data-t]').forEach(el => {
-            const t = parseInt(el.dataset.t);
-            animCount(el, t, t >= 100 ? '+' : '');
-          });
-          obs.disconnect();
-        }
-      });
-    }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
+  const ref = useRef(null)
+  const [animate] = useState(() => !reducedMotion())
+  const seen = useInView(ref, true).phase === 'in'
 
   return (
-    <div className="counters-bg" ref={ref}>
-      <div className="counters-grid rv">
-        {counters.map((c) => (
-          <div key={c.label}>
-            <span className="cval" data-t={c.t}>0</span>
-            <span className="clbl">{c.label}</span>
-          </div>
-        ))}
-      </div>
+    <div data-screen-label="08 Counters" id="counters" ref={ref}>
+      <Section tone="band">
+        <div data-r="counters">
+          {COUNTERS.map((c, i) =>
+            seen ? (
+              <StatCounter key={i} value={c[0]} label={c[1]} animate={animate} />
+            ) : (
+              <div key={i} className="az-stat">
+                <span className="az-stat__val">0</span>
+                <span className="az-stat__lbl">{c[1]}</span>
+              </div>
+            )
+          )}
+        </div>
+      </Section>
     </div>
-  );
+  )
 }

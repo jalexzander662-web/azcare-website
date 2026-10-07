@@ -1,27 +1,24 @@
-const trustItems = [
-  { img: '/LOGOS/Verified Staff.webp', title: 'Verified Staff', sub: 'Background checked professionals' },
-  { img: '/LOGOS/Eco-Friendly.webp', title: 'Eco-Friendly', sub: 'Safe for kids & pets' },
-  { img: '/LOGOS/Punctual.webp', title: 'Punctual', sub: 'Always on time' },
-  { img: '/LOGOS/Satisfaction Guarantee.webp', title: 'Satisfaction Guarantee', sub: 'Free redo if not satisfied' },
-  { img: '/LOGOS/No Hidden Charges.webp', title: 'No Hidden Charges', sub: 'Transparent pricing' },
-];
+import Section from '../ds/Section'
+import TrustItem from '../ds/TrustItem'
+import { TRUST } from '../data/site'
 
 export default function TrustStrip() {
   return (
-    <div className="trust-strip">
-      <div className="trust-inner">
-        {trustItems.map((item) => (
-          <div className="titem rv" key={item.title}>
-            <div className="titem-icon">
-              <img src={item.img} alt={item.title} loading="lazy" decoding="async" />
-            </div>
-            <div className="titem-text">
-              <strong>{item.title}</strong>
-              <span>{item.sub}</span>
+    <div data-screen-label="03 Trust strip" id="trust">
+      <Section tone="trust">
+        <div data-r="trust">
+          <div data-r="trust-track">
+            {TRUST.map((t) => (
+              <TrustItem key={t.title} {...t} />
+            ))}
+            <div data-r="trust-dup" aria-hidden="true">
+              {TRUST.map((t) => (
+                <TrustItem key={t.title} {...t} />
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      </Section>
     </div>
-  );
+  )
 }

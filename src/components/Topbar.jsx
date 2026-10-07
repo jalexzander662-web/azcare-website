@@ -1,22 +1,33 @@
+import { EMAIL, MAPS_URL, PHONE, PHONE_HREF, SOCIALS, WA_URL } from '../data/links'
+
 export default function Topbar() {
   return (
-    <div className="topbar">
-      <div className="topbar-left">
-        <a href="mailto:azcarepk@gmail.com">
-          <i className="fa-solid fa-envelope" style={{marginRight:'5px',color:'#7ab3f5'}}></i>azcarepk@gmail.com
+    <div className="az-topbar">
+      <div className="az-topbar__l">
+        <a data-r="tb-hide" href={'mailto:' + EMAIL}>
+          <i className="fa-solid fa-envelope" style={{ marginRight: 5, color: '#7ab3f5' }} />
+          {EMAIL}
         </a>
-        <a href="https://www.google.com/maps?q=24.9172661,67.0307852&z=17&hl=en" target="_blank" rel="noreferrer" style={{textDecoration:'none',color:'inherit'}}>
-          <i className="fa-solid fa-location-dot" style={{marginRight:'5px',color:'#f5a623'}}></i>Karachi, Pakistan
+        <a data-r="tb-hide" href={MAPS_URL} target="_blank" rel="noreferrer">
+          <i className="fa-solid fa-location-dot" style={{ marginRight: 5, color: '#f5a623' }} />
+          Karachi, Pakistan
+        </a>
+        <a href={PHONE_HREF}>
+          <i className="fa-solid fa-phone" style={{ marginRight: 6, color: '#22c55e' }} />
+          {PHONE}
+        </a>
+        <a data-r="tb-mob" href={WA_URL} target="_blank" rel="noreferrer">
+          <i className="fa-brands fa-whatsapp" style={{ marginRight: 6, color: '#25d366', fontSize: '1rem' }} />
+          WhatsApp
         </a>
       </div>
-      <div className="topbar-right">
-        <a href="https://www.facebook.com/azcare.pk" target="_blank" rel="noreferrer" className="tb-icon tb-fb" title="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/azcare.pk?igsh=MWlheXkzcjVpNm1zdQ==" target="_blank" rel="noreferrer" className="tb-icon tb-ig" title="Instagram"><i className="fa-brands fa-instagram"></i></a>
-        <a href="https://www.youtube.com/@azcarepk" target="_blank" rel="noreferrer" className="tb-icon tb-yt" title="YouTube"><i className="fa-brands fa-youtube"></i></a>
-        <a href="https://www.google.com/search?q=AZ+Care.pk" target="_blank" rel="noreferrer" className="tb-icon tb-gr" title="Google Reviews"><i className="fa-brands fa-google"></i></a>
-        <a href="https://wa.me/923222468123?text=Hello%20AZ%20Care%20Assalam%20o%20Alaikum!%20Mujhe%20cleaning%20service%20chahiye." target="_blank" rel="noreferrer" className="tb-icon tb-wa" title="WhatsApp"><i className="fa-brands fa-whatsapp"></i></a>
-        <a href="https://www.tiktok.com/@azcarepk?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="tb-icon tb-tt" title="TikTok"><i className="fa-brands fa-tiktok"></i></a>
+      <div className="az-topbar__r" data-r="tb-hide">
+        {SOCIALS.map(([key, href, icon]) => (
+          <a key={key} href={href} target="_blank" rel="noreferrer" title={key} className={'az-social az-social--topbar az-social--' + key}>
+            <i className={icon} />
+          </a>
+        ))}
       </div>
     </div>
-  );
+  )
 }

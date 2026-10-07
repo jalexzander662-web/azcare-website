@@ -1,178 +1,274 @@
-export default function Footer() {
-  const socialBtnStyle = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '38px',
-    height: '38px',
-    borderRadius: '50%',
-    backgroundColor: '#1e293b',
-    color: '#ffffff',
-    textDecoration: 'none',
-    fontSize: '15px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-  };
+// Props: { onServiceLink: (label: string) => void, onSectionLink: (id: string) => void }
+// Hand port of src/ds/Footer.js + the design's social bounce / magnet / service-preview effects (page-script.js 284-405).
+import { useEffect } from 'react'
+import { reducedMotion } from '../lib/motion'
+import { SOCIALS, PHONE, PHONE_HREF, EMAIL, WA_URL, LOGO } from '../data/links'
+import { FOOTER_SERVICES } from '../data/site'
 
-  const linkStyle = {
-    color: '#94a3b8',
-    textDecoration: 'none',
-    fontSize: '14px',
-    transition: 'color 0.2s ease'
-  };
+const AREAS = [{ name: 'Karachi', primary: true }, { name: 'Lahore' }, { name: 'Islamabad' }]
+const QUICK = [['How It Works', 'process'], ['Reviews', 'reviews'], ['Our Work', 'gallery'], ['FAQ', 'faq'], ['Contact', 'contact']]
+// design order + icons; href resolved from links.js
+const FOOT_SOCIALS = [
+  ['whatsapp', 'fa-brands fa-whatsapp'],
+  ['facebook', 'fa-brands fa-facebook-f'],
+  ['instagram', 'fa-brands fa-instagram'],
+  ['youtube', 'fa-brands fa-youtube'],
+  ['tiktok', 'fa-brands fa-tiktok'],
+  ['phone', 'fa-solid fa-phone'],
+]
+const SOCIAL_HREF = Object.fromEntries(SOCIALS.map(s => [s[0], s[1]]))
+SOCIAL_HREF.phone = PHONE_HREF
 
-  const headingStyle = {
-    color: '#ffffff',
-    marginBottom: '12px',
-    fontSize: '15px',
-    fontWeight: '600',
-    letterSpacing: '0.5px',
-    textTransform: 'uppercase'
-  };
+const PREVIEW = {
+  'sofa cleaning': '/img/services/sofa-cleaning.webp',
+  'carpet cleaning': '/img/services/floor-cleaning.webp',
+  'mattress cleaning': '/img/services/mattress-cleaning.webp',
+  'car detailing': '/img/car/car-wash.webp',
+  'solar panel cleaning': '/img/services/solar-panel-cleaning.webp',
+  'office cleaning': '/img/services/office-cleaning.webp',
+  'kitchen cleaning': '/img/services/kitchen-cleaning.webp',
+  'laundry': '/img/laundry/wash-fold.webp',
+  'floor cleaning': '/img/services/floor-cleaning.webp',
+  'fumigation': '/img/services/fumigation.webp',
+}
+
+const BOUNCE = [
+  { transform: 'translateY(-220px) scale(.9, 1.1)', opacity: 0, offset: 0, easing: 'cubic-bezier(.55,0,1,.45)' },
+  { transform: 'translateY(0) scale(1.25, .7)', opacity: 1, offset: 0.3, easing: 'cubic-bezier(.2,.6,.4,1)' },
+  { transform: 'translateY(-90px) scale(.92, 1.1)', opacity: 1, offset: 0.5, easing: 'cubic-bezier(.55,0,1,.45)' },
+  { transform: 'translateY(0) scale(1.15, .82)', opacity: 1, offset: 0.66, easing: 'cubic-bezier(.2,.6,.4,1)' },
+  { transform: 'translateY(-34px) scale(.97, 1.04)', opacity: 1, offset: 0.79, easing: 'cubic-bezier(.55,0,1,.45)' },
+  { transform: 'translateY(0) scale(1.07, .93)', opacity: 1, offset: 0.89, easing: 'cubic-bezier(.2,.6,.4,1)' },
+  { transform: 'translateY(-10px)', opacity: 1, offset: 0.95, easing: 'cubic-bezier(.55,0,1,.45)' },
+  { transform: 'translateY(0) scale(1)', opacity: 1, offset: 1 },
+]
+
+// bounce-in of the social icons each time the box scrolls into view
+function bounce() {
+  const anims = []
+  const play = box => [...box.querySelectorAll('a')].forEach((a, i) => {
+    anims.push(a.animate(BOUNCE, { duration: 1500, delay: i * 120, fill: 'backwards' }))
+  })
+  let inV = false
+  let raf = 0
+  const check = () => {
+    const box = document.querySelector('.az-footer__soc')
+    if (!box) return
+    const r = box.getBoundingClientRect()
+    const v = r.height > 0 && r.top < window.innerHeight - 20 && r.bottom > 20
+    if (v && !inV) {
+      anims.splice(0).forEach(an => an.cancel())
+      play(box)
+    }
+    inV = v
+  }
+  const chk = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(check) }
+  window.addEventListener('scroll', chk, { passive: true })
+  window.addEventListener('resize', chk)
+  const t = setInterval(check, 400)
+  return () => {
+    window.removeEventListener('scroll', chk)
+    window.removeEventListener('resize', chk)
+    clearInterval(t)
+    cancelAnimationFrame(raf)
+    anims.forEach(an => an.cancel())
+  }
+}
+
+// magnet + tooltip label on the social icons near the pointer
+function magnet() {
+  const R = 80
+  const E = 'transform .35s cubic-bezier(.16,1,.3,1), background .25s, box-shadow .3s'
+  const reset = a => { a.style.transform = ''; a.style.background = ''; a.style.boxShadow = '' }
+  const N = { facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube', google: 'Google', whatsapp: 'WhatsApp', tiktok: 'TikTok', phone: 'Call us' }
+  const lb = document.createElement('div')
+  lb.setAttribute('aria-hidden', 'true')
+  lb.style.cssText = 'position:fixed;left:0;top:0;z-index:2500;pointer-events:none;opacity:0;padding:.35rem .8rem;border-radius:50px;background:var(--acc);color:#fff;font:600 .72rem/1 var(--font-sub);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;box-shadow:0 8px 20px rgba(30,144,255,.4);transition:opacity .2s ease,transform .35s cubic-bezier(.16,1,.3,1)'
+  document.body.appendChild(lb)
+  const onMag = e => {
+    if (e.pointerType === 'touch') return
+    let hit = null
+    const box = [...document.querySelectorAll('.az-footer__soc')].find(b => {
+      const r = b.getBoundingClientRect()
+      return e.clientX > r.left - 50 && e.clientX < r.right + 50 && e.clientY > r.top - 50 && e.clientY < r.bottom + 50
+    })
+    document.querySelectorAll('.az-footer__soc a').forEach(a => {
+      if (!box || !box.contains(a)) { reset(a); return }
+      const r = a.getBoundingClientRect()
+      const cx = r.left + r.width / 2
+      const cy = r.top + r.height / 2
+      const dx = e.clientX - cx
+      const dy = e.clientY - cy
+      const d = Math.hypot(dx, dy)
+      a.style.transition = E
+      if (d < R) {
+        const k = 1 - d / R
+        const on = d < r.width / 2
+        a.style.transform = `translate(${dx * 0.45}px, ${dy * 0.45 - 6 - 6 * k}px) scale(${on ? 1.22 : 1.1})`
+        a.style.background = on ? 'var(--acc)' : ''
+        a.style.boxShadow = on ? '0 10px 28px rgba(30,144,255,.55)' : ''
+        if (on) hit = a
+      } else reset(a)
+    })
+    if (hit) {
+      const r = hit.getBoundingClientRect()
+      lb.textContent = N[hit.title] || hit.title || ''
+      const w = lb.offsetWidth
+      lb.style.opacity = '1'
+      lb.style.transform = `translate(${r.left + r.width / 2 - w / 2}px, ${r.bottom + 14}px)`
+    } else lb.style.opacity = '0'
+  }
+  document.addEventListener('pointermove', onMag, { passive: true })
+  return () => {
+    document.removeEventListener('pointermove', onMag)
+    document.querySelectorAll('.az-footer__soc a').forEach(reset)
+    lb.remove()
+  }
+}
+
+// hover preview image card following the pointer over footer service links
+function preview() {
+  Object.values(PREVIEW).forEach(p => { const i = new Image(); i.src = p })
+  const el = document.createElement('div')
+  el.setAttribute('aria-hidden', 'true')
+  el.style.cssText = 'position:fixed;left:0;top:0;width:220px;height:280px;border-radius:16px;overflow:hidden;pointer-events:none;z-index:2500;opacity:0;border:1px solid rgba(30,144,255,.35);box-shadow:0 24px 60px rgba(0,0,0,.55);background:#0b1e3d;transition:opacity .25s ease;will-change:transform'
+  const img = document.createElement('img')
+  img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.15);transition:transform .6s cubic-bezier(.16,1,.3,1)'
+  el.appendChild(img)
+  document.body.appendChild(el)
+  let tx = 0, ty = 0, x = 0, y = 0, rot = 0, shown = false, raf = 0, cur = '', raf2 = 0
+  const loop = () => {
+    const px = x
+    x += (tx - x) * 0.14
+    y += (ty - y) * 0.14
+    rot += ((x - px) * 0.9 - rot) * 0.15
+    const r = Math.max(-14, Math.min(14, rot))
+    el.style.transform = `translate(${x + 28}px, ${y - 140}px) rotate(${r}deg) scale(${shown ? 1 : 0.85})`
+    if (shown || Math.abs(tx - x) > 0.5 || el.style.opacity !== '0') raf = requestAnimationFrame(loop)
+    else raf = 0
+  }
+  const kick = () => { if (!raf) raf = requestAnimationFrame(loop) }
+  const onPv = e => {
+    if (e.pointerType === 'touch') return
+    const a = e.target.closest && e.target.closest('.az-footer li a')
+    const key = a && a.textContent.trim().toLowerCase()
+    if (a && PREVIEW[key]) {
+      tx = Math.min(e.clientX, window.innerWidth - 260)
+      ty = Math.max(e.clientY, 150)
+      if (!shown) { x = tx; y = ty }
+      if (cur !== key) {
+        cur = key
+        img.src = PREVIEW[key]
+        img.style.transform = 'scale(1.15)'
+        cancelAnimationFrame(raf2)
+        raf2 = requestAnimationFrame(() => { img.style.transform = 'scale(1)' })
+      }
+      shown = true
+      el.style.opacity = '1'
+      kick()
+    } else if (shown) { shown = false; cur = ''; el.style.opacity = '0' }
+  }
+  const onScroll = () => { if (shown) { shown = false; el.style.opacity = '0' } }
+  document.addEventListener('pointermove', onPv, { passive: true })
+  document.addEventListener('scroll', onScroll, { passive: true })
+  return () => {
+    document.removeEventListener('pointermove', onPv)
+    document.removeEventListener('scroll', onScroll)
+    cancelAnimationFrame(raf)
+    cancelAnimationFrame(raf2)
+    el.remove()
+  }
+}
+
+export default function Footer({ onServiceLink, onSectionLink }) {
+  useEffect(() => {
+    if (reducedMotion()) return
+    const offs = [bounce(), magnet(), preview()]
+    return () => offs.forEach(off => off())
+  }, [])
 
   return (
-    <footer style={{
-      backgroundColor: '#0f172a',
-      color: '#cbd5e1',
-      padding: '50px 20px 20px 20px',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
-      borderTop: '1px solid #1e293b'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        gap: '35px'
-      }}>
-        
-        {/* Brand & Social Row */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', maxWidth: '600px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src="/AZ CARE Website Logo.webp" alt="AZ Care.pk Logo" style={{ height: '52px', objectFit: 'contain' }} />
+    <div data-screen-label="11 Footer" id="footer" data-r="footer">
+      <footer className="az-footer">
+        <div className="az-footer__in">
+          <div className="az-footer__brand">
+            <img src={LOGO} alt="AZ Care.pk" />
+            <p>Professional cleaning company. Eco-friendly, trusted, guaranteed.</p>
+            <span className="az-footer__tag">"Where Cleanliness Meets Perfection"</span>
+            <div className="az-footer__soc">
+              {FOOT_SOCIALS.map(s => (
+                <a
+                  key={s[0]}
+                  href={SOCIAL_HREF[s[0]]}
+                  {...(s[0] === 'phone' ? {} : { target: '_blank', rel: 'noreferrer' })}
+                  title={s[0]}
+                  className="az-social az-social--footer"
+                >
+                  <i className={s[1]} />
+                </a>
+              ))}
+            </div>
           </div>
-          <p style={{ margin: 0, fontSize: '15px', color: '#94a3b8', lineHeight: '1.5' }}>
-            Professional cleaning company. Eco-friendly, trusted, guaranteed.
-          </p>
-          <span style={{ fontStyle: 'italic', color: '#38bdf8', fontSize: '14px', fontWeight: '500' }}>
-            "Where Cleanliness Meets Perfection"
-          </span>
-          
-          {/* Social Icons */}
-          <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="https://wa.me/923222468123" target="_blank" rel="noreferrer" style={socialBtnStyle} title="WhatsApp"><i className="fa-brands fa-whatsapp"></i></a>
-            <a href="https://www.facebook.com/azcare.pk" target="_blank" rel="noreferrer" style={socialBtnStyle} title="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/azcare.pk?igsh=MWlheXkzcjVpNm1zdQ==" target="_blank" rel="noreferrer" style={socialBtnStyle} title="Instagram"><i className="fa-brands fa-instagram"></i></a>
-            <a href="https://www.youtube.com/@azcarepk" target="_blank" rel="noreferrer" style={socialBtnStyle} title="YouTube"><i className="fa-brands fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@azcarepk?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" style={socialBtnStyle} title="TikTok"><i className="fa-brands fa-tiktok"></i></a>
-            <a href="tel:03222468123" style={socialBtnStyle} title="Call"><i className="fa-solid fa-phone"></i></a>
-          </div>
-        </div>
-
-        <hr style={{ width: '100%', border: '0', borderTop: '1px solid #1e293b', margin: '0' }} />
-
-        {/* Services Horizontal Pill Bar */}
-        <div style={{ width: '100%' }}>
-          <h4 style={headingStyle}>Our Services</h4>
-          <ul style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px 22px', listStyle: 'none', padding: 0, margin: 0 }}>
-            {['Sofa Cleaning','Carpet Cleaning','Mattress Cleaning','Car Detailing','Solar Panel Cleaning','Office Cleaning','Washroom Cleaning','Kitchen Cleaning','Floor Cleaning','Fumigation'].map(s => (
-              <li key={s}>
-                <a href="#services" style={linkStyle}>{s}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Service Areas Section (Karachi Highlighted & Lahore) */}
-        <div style={{ width: '100%' }}>
-          <h4 style={headingStyle}>Service Areas</h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', alignItems: 'center' }}>
-            
-            {/* Karachi - Primary Highlighted City Badge */}
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#0284c7',
-              color: '#ffffff',
-              padding: '6px 16px',
-              borderRadius: '20px',
-              fontSize: '14px',
-              fontWeight: '600',
-              boxShadow: '0 2px 6px rgba(2, 132, 199, 0.4)'
-            }}>
-              <i className="fa-solid fa-location-dot" style={{color: '#ffe4e6'}}></i> Karachi <span style={{fontSize: '11px', background: 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: '10px', marginLeft: '4px'}}>Primary</span>
-            </span>
-
-            {/* Lahore - Standard City Badge */}
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#1e293b',
-              color: '#cbd5e1',
-              padding: '6px 16px',
-              borderRadius: '20px',
-              fontSize: '14px',
-              fontWeight: '500',
-              border: '1px solid #334155'
-            }}>
-              <i className="fa-solid fa-location-dot" style={{color: '#f97316'}}></i> Lahore
-            </span>
-
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: '#1e293b',
-              color: '#cbd5e1',
-              padding: '6px 16px',
-              borderRadius: '20px',
-              fontSize: '14px',
-              fontWeight: '500',
-              border: '1px solid #334155'
-            }}>
-              <i className="fa-solid fa-location-dot" style={{color: '#f97316'}}></i> Islamabad
-            </span>
-
-          </div>
-        </div>
-
-        {/* Quick Links & Contact Details Inline Row */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '40px', width: '100%' }}>
-          
-          {/* Quick Links */}
-          <div>
-            <h4 style={headingStyle}>Quick Links</h4>
-            <ul style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '18px', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><a href="#process" style={linkStyle}>How It Works</a></li>
-              <li><a href="#reviews" style={linkStyle}>Reviews</a></li>
-              <li><a href="#gallery" style={linkStyle}>Our Work</a></li>
-              <li><a href="#why" style={linkStyle}>FAQ</a></li>
-              <li><a href="#contact" style={linkStyle}>Contact</a></li>
+          <hr />
+          <div style={{ width: '100%' }}>
+            <h4>Our Services</h4>
+            <ul>
+              {FOOTER_SERVICES.map(s => (
+                <li key={s}>
+                  <a href="#services" onClick={e => { e.preventDefault(); onServiceLink(s) }}>{s}</a>
+                </li>
+              ))}
             </ul>
           </div>
-
-          {/* Contact Details */}
-          <div>
-            <h4 style={headingStyle}>Contact Info</h4>
-            <ul style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '18px', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><a href="tel:03222468123" style={{...linkStyle, display: 'flex', alignItems: 'center', gap: '6px'}}><i className="fa-solid fa-phone" style={{color:'#ef4444'}}></i> 0322-2468123</a></li>
-              <li><a href="https://wa.me/923222468123" target="_blank" rel="noreferrer" style={{...linkStyle, display: 'flex', alignItems: 'center', gap: '6px'}}><i className="fa-brands fa-whatsapp" style={{color:'#25d366'}}></i> WhatsApp</a></li>
-              <li><a href="mailto:azcarepk@gmail.com" style={{...linkStyle, display: 'flex', alignItems: 'center', gap: '6px'}}><i className="fa-solid fa-envelope" style={{color:'#38bdf8'}}></i> Email</a></li>
-            </ul>
+          <div style={{ width: '100%' }}>
+            <h4>Service Areas</h4>
+            <div className="az-footer__areas">
+              {AREAS.map(a => (
+                <span key={a.name} className={'az-city' + (a.primary ? ' az-city--primary' : '')}>
+                  <i className="fa-solid fa-location-dot" /> {a.name}
+                  {a.primary && <em>Primary</em>}
+                </span>
+              ))}
+            </div>
           </div>
-
+          <div className="az-footer__row">
+            <div>
+              <h4>Quick Links</h4>
+              <ul style={{ gap: 18 }}>
+                {QUICK.map(q => (
+                  <li key={q[1]}>
+                    <a href={'#' + q[1]} onClick={e => { e.preventDefault(); onSectionLink(q[1]) }}>{q[0]}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4>Contact Info</h4>
+              <ul style={{ gap: 18 }}>
+                <li>
+                  <a href={PHONE_HREF}>
+                    <i className="fa-solid fa-phone" style={{ color: '#ef4444' }} /> {PHONE}
+                  </a>
+                </li>
+                <li>
+                  <a href={WA_URL}>
+                    <i className="fa-brands fa-whatsapp" style={{ color: '#25d366' }} /> WhatsApp
+                  </a>
+                </li>
+                <li>
+                  <a href={'mailto:' + EMAIL}>
+                    <i className="fa-solid fa-envelope" style={{ color: '#38bdf8' }} /> Email
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-
-      </div>
-
-      {/* Footer Bottom Bar */}
-      <div style={{ borderTop: '1px solid #1e293b', marginTop: '45px', paddingTop: '20px', textAlign: 'center', fontSize: '13px', color: '#64748b' }}>
-        <p style={{ margin: '0 0 6px 0' }}>© 2026 AZ Care.pk — Professional Cleaning Services | All Rights Reserved</p>
-        <span style={{ color: '#38bdf8', fontWeight: '500', letterSpacing: '0.5px' }}>Pakistan Walon Ki Pehli Choice</span>
-      </div>
-    </footer>
-  );
+        <div className="az-footer__bar">
+          <p>© 2026 AZ Care.pk — Professional Cleaning Services | All Rights Reserved</p>
+          <span>Pakistan Walon Ki Pehli Choice</span>
+        </div>
+      </footer>
+    </div>
+  )
 }

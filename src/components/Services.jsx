@@ -1,152 +1,134 @@
-import { cleaningServices } from '../data/cleaningServices';
-import { carServices } from '../data/carServices';
+// Props: { tab: "home"|"car"|"laundry", onTab: (id) => void, skipToken: number, onOpen: (service) => void, onBook: (serviceKey: string) => void }
+import { useEffect, useRef, useState } from 'react'
+import Section from '../ds/Section'
+import PageTabs from '../ds/PageTabs'
+import ServiceCard from '../ds/ServiceCard'
+import ParticleTitle from './ParticleTitle'
+import { SERVICES, TABS } from '../data/services'
+import { SVC_TEXT } from '../data/site'
+import { reducedMotion, sp } from '../lib/motion'
 
-export default function Services({
-  activePage,
-  onPageChange,
-  onDetailOpen,
-  onBookService,
-  sheetProducts = [],
-  loadingProducts,
-  onAddToCart,
-}) {
+const WORDS = SVC_TEXT.split(' ')
+const hidden = { position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }
+
+const cardPrice = (p) => {
+  if (!/\|/.test(p)) return p
+  const n = p
+    .split('|')
+    .map((t) => +t.replace(/[^\d]/g, '') || 0)
+    .filter(Boolean)
+  return n.length ? 'From Rs. ' + Math.min(...n).toLocaleString('en-US') : p
+}
+
+// the design keeps its intro state for the page's lifetime; Services remounts when the shop is left, so remember it here
+let introDone = false
+
+export default function Services({ tab, onTab, skipToken, onOpen, onBook }) {
+  const [reduced] = useState(reducedMotion)
+  const [svc, setSvc] = useState(reduced || introDone ? 2 : 0) // 0 idle, 1 head in view, 2 settled
+  const [svcSkip, setSvcSkip] = useState(reduced)
+  const svcNow = useRef(svc)
+  const timer = useRef(0)
+  const headRef = useRef(null)
+
+  const go = (n) => {
+    svcNow.current = n
+    setSvc(n)
+    if (n === 2) introDone = true
+  }
+  const skip = () => {
+    if (svcNow.current < 2) {
+      clearTimeout(timer.current)
+      go(2)
+      setSvcSkip(true)
+    }
+  }
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (!e.isIntersecting || svcNow.current) return
+          go(1)
+          timer.current = setTimeout(() => go(2), 0)
+        }),
+      { rootMargin: '0px 0px 12% 0px' }
+    )
+    io.observe(headRef.current)
+    return () => {
+      io.disconnect()
+      clearTimeout(timer.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (skipToken > 0) skip()
+  }, [skipToken])
+
+  const list = SERVICES[tab] || []
+
   return (
-    <div id="services" className="services-bg">
-      <div className="sec">
-        <div className="sec-inner">
-          <div className="sec-head center rv">
-            <div className="sec-tag">What We Offer</div>
-            <h2 className="sec-title">Our <em>Services</em></h2>
-            <p className="sec-sub">Professional cleaning, car detailing &amp; quality products — all under one roof in Karachi.</p>
-          </div>
-
-          <div className="page-tabs rv">
-            <button className={`page-tab${activePage === 'cleaning' ? ' active' : ''}`} onClick={() => onPageChange('cleaning')}>Cleaning Services</button>
-            <button className={`page-tab${activePage === 'car' ? ' active' : ''}`} onClick={() => onPageChange('car')}>Car Detailing</button>
-            <button className={`page-tab${activePage === 'products' ? ' active' : ''}`} onClick={() => onPageChange('products')}>Shop / Products</button>
-          </div>
-
-          {/* Cleaning Services Section */}
-          <div id="spage-cleaning" className={`svc-page${activePage === 'cleaning' ? ' active' : ''}`}>
-            <div className="srv-grid">
-              {cleaningServices.map((s) => (
-                <div key={s.name} className="srv-card rv" style={{cursor:'pointer'}} onClick={() => onDetailOpen(s, 'AZ Care.pk — Professional Cleaning Services')}>
-                  <div className="srv-img">
-                    <img src={s.img} alt={s.name} loading="lazy" decoding="async" />
-                    <div className="srv-overlay">
-                      <div>
-                        <span className="srv-cat">{s.cat}</span>
-                        <div className="srv-overlay-title">{s.name}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="srv-body">
-                    <p>{s.desc}</p>
-                    <div className="card-price">{s.price}</div>
-                    <button 
-                      className="srv-book" 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onBookService) {
-                          onBookService(s.name);
-                        } else {
-                          onDetailOpen(s, 'AZ Care.pk — Professional Cleaning Services');
-                        }
-                      }}
-                    >
-                      BOOK NOW →
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Car Detailing Services Section */}
-          <div id="spage-car" className={`svc-page${activePage === 'car' ? ' active' : ''}`}>
-            <div className="srv-grid">
-              {carServices.map((s) => (
-                <div key={s.name} className="srv-card rv" style={{cursor:'pointer'}} onClick={() => onDetailOpen(s, 'AZ Care.pk — Professional Car Detailing')}>
-                  <div className="srv-img">
-                    <img src={s.img} alt={s.name} loading="lazy" decoding="async" />
-                    <div className="srv-overlay">
-                      <div>
-                        <span className="srv-cat">{s.cat}</span>
-                        <div className="srv-overlay-title">{s.name}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="srv-body">
-                    <p>{s.desc}</p>
-                    <div className="card-price">{s.price}</div>
-                    <button 
-                      className="srv-book" 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onBookService) {
-                          onBookService(s.name);
-                        } else {
-                          onDetailOpen(s, 'AZ Care.pk — Professional Car Detailing');
-                        }
-                      }}
-                    >
-                      BOOK NOW →
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dynamic Google Sheet Products Tab */}
-          <div id="spage-products" className={`svc-page${activePage === 'products' ? ' active' : ''}`}>
-            {loadingProducts ? (
-              <div style={{ textAlign: 'center', padding: '50px 20px', color: '#7a90b5', fontSize: '1.1rem' }}>
-                ⏳ Loading live products...
-              </div>
-            ) : sheetProducts.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: '#7a90b5' }}>
-                No products found in Google Sheet.
-              </div>
-            ) : (
-              <div className="prod-grid">
-                {sheetProducts.map((p) => (
-                  <div key={p.id || p.name} className="prod-card rv">
-                    <div className="prod-img">
-                      <img src={p.image} alt={p.name} loading="lazy" decoding="async" />
-                    </div>
-                    <div className="prod-body">
-                      <div className="prod-name">{p.name}</div>
-                      <div className="prod-price">
-                        {String(p.price).startsWith('Rs') ? p.price : `Rs. ${p.price}`}
-                      </div>
-                      <button
-                        onClick={() => onAddToCart(p)}
-                        className="prod-buy"
-                        style={{
-                          width: '100%',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          background: 'linear-gradient(135deg, var(--acc), var(--acc2))',
-                          color: '#fff',
-                          border: 'none',
-                          marginTop: 'auto',
-                          padding: '10px 14px',
-                          borderRadius: '25px',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        🛒 ADD TO CART
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
+    <div data-screen-label="04 Our Services" id="services">
+      <Section tone="services">
+        <div className="az-sec-head az-sec-head--center" ref={headRef}>
+          <div className="az-tag">What We Offer</div>
+          <h2 className="az-sec-title" style={{ position: 'relative' }}>
+            <span style={hidden}>Our Services</span>
+            <ParticleTitle play={svc >= 1} reduced={reduced} />
+          </h2>
+          <p
+            className="az-sec-sub"
+            aria-label="Professional cleaning, car detailing, laundry and quality products — all under one roof in Karachi."
+            style={{ maxWidth: 560 }}
+          >
+            {WORDS.map((w, i) => {
+              const d = i * 0.025
+              return (
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  style={{
+                    display: 'inline-block',
+                    marginRight: '.28em',
+                    filter: svc >= 1 ? 'blur(0px)' : 'blur(10px)',
+                    opacity: svc >= 1 ? 1 : 0,
+                    transform: svc >= 1 ? 'translateY(0)' : 'translateY(-14px)',
+                    transition: svc >= 1 && !svcSkip ? sp(`filter .4s ease ${d}s, opacity .4s ease ${d}s, transform .4s ease ${d}s`) : 'none',
+                  }}
+                >
+                  {w}
+                </span>
+              )
+            })}
+          </p>
         </div>
-      </div>
+        <div
+          style={{
+            marginBottom: 'var(--head-gap)',
+            opacity: 1,
+            transform: 'none',
+            pointerEvents: 'auto',
+            transition: 'opacity .35s ease, transform .35s ease',
+          }}
+        >
+          <PageTabs tabs={TABS} active={tab} onChange={onTab} />
+        </div>
+        <div style={{ opacity: 1, transition: 'opacity .25s ease' }}>
+          <div data-r="grid" data-tab={tab}>
+            {list.map((s) => (
+              <ServiceCard
+                key={s.key}
+                img={s.cardImg}
+                category={s.cat}
+                name={s.name}
+                price={cardPrice(s.price)}
+                onClick={() => onOpen(s)}
+                onBook={() => onBook(s.key)}
+              />
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
-  );
+  )
 }

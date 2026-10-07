@@ -1,266 +1,284 @@
-import { useState, useEffect } from 'react';
-import Topbar from './components/Topbar';
-import Nav from './components/Nav';
-import Hero from './components/Hero';
-import TrustStrip from './components/TrustStrip';
-import Services from './components/Services';
-import Gallery from './components/Gallery';
-import Process from './components/Process';
-import WhyUs from './components/WhyUs';
-import Counters from './components/Counters';
-import Reviews from './components/Reviews';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import WAFloat from './components/WAFloat';
-import BookModal from './components/BookModal';
-import DetailModal from './components/DetailModal';
-import CheckoutPage from './components/CheckoutPage';
-import ProductsPage from './components/ProductsPage';
-import { useScrollReveal } from './components/useScrollReveal';
+import { useCallback, useEffect, useRef, useState } from 'react'
+import CartDrawer from './ds/CartDrawer'
+import WAFloat from './ds/WAFloat'
+import Preloader from './components/Preloader'
+import ScrollProgress from './components/ScrollProgress'
+import Topbar from './components/Topbar'
+import Nav from './components/Nav'
+import Hero from './components/Hero'
+import TrustStrip from './components/TrustStrip'
+import Services from './components/Services'
+import ServiceDetail from './components/ServiceDetail'
+import Shop from './components/Shop'
+import ProductDetail from './components/ProductDetail'
+import Gallery from './components/Gallery'
+import Process from './components/Process'
+import Faq from './components/Faq'
+import Counters from './components/Counters'
+import Reviews from './components/Reviews'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
+import BackToTop from './components/BackToTop'
+import BookingModal from './components/BookingModal'
+import OrderSheet from './components/OrderSheet'
+import { CATALOG, SERVICES } from './data/services'
+import { fetchProducts, postBooking, postOrder } from './lib/sheet'
+import { normalizeProducts } from './lib/products'
+import { buildOrder, newOrderId, subtotal } from './lib/order'
+import { track } from './lib/pixels'
+import { reducedMotion } from './lib/motion'
+import { revealService, scrollToId } from './lib/scroll'
+
+const pageFromHash = () => (window.location.hash === '#products' ? 'products' : 'home')
 
 export default function App() {
-  const [bookOpen, setBookOpen] = useState(false);
-  const [selectedBookingService, setSelectedBookingService] = useState('');
-  
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [detailService, setDetailService] = useState(null);
-  const [detailBrand, setDetailBrand] = useState('');
-  
-  // Navigation States
-  const [activePage, setActivePage] = useState('main'); 
-  const [currentPage, setCurrentPage] = useState('main'); 
-  const [orderCompletedData, setOrderCompletedData] = useState(null);
+  const [page, setPage] = useState(pageFromHash)
+  const [tab, setTab] = useState('home') // services tab: home | car | laundry
+  const [svcSkip, setSvcSkip] = useState(0) // bump → Services shows its intro animation in its final state
+  const [cart, setCart] = useState([]) // {id (=product key), name, image, price, quantity}
+  const [cartOpen, setCartOpen] = useState(false) // DS drawer (only reachable while the cart is empty)
+  const [order, setOrder] = useState(null) // null | 'form' | 'sent'
+  const [book, setBook] = useState(null) // null = closed, '' = open, 'key' = open with that service
+  const [detail, setDetail] = useState(null) // service shown in ServiceDetail
+  const [pdetail, setPdetail] = useState(null) // product shown in ProductDetail
+  const [products, setProducts] = useState([])
+  const [productsState, setProductsState] = useState('loading') // loading | ready | error
+  const [preDone, setPreDone] = useState(false)
+  const [reduced] = useState(reducedMotion) // read once, like the design
 
-  // Cart State
-  const [cartItems, setCartItems] = useState([]);
-  
-  // Products State from Google Sheet
-  const [products, setProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
-
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLU7x56fRc5YBnca91B4JOPneelUS2ruD1JFX8Nyk4vclCyzd69AjeXqXtgY5WxhUh/exec';
-
-  const fetchProducts = async () => {
-    try {
-      setLoadingProducts(true);
-      const res = await fetch(GOOGLE_SCRIPT_URL);
-      const json = await res.json();
-      if (json.status === 'success' && Array.isArray(json.data)) {
-        setProducts(json.data);
-      }
-    } catch (err) {
-      console.error('Failed to load global products:', err);
-    } finally {
-      setLoadingProducts(false);
-    }
-  };
+  // handlers that re-enter themselves via setTimeout must see current state, not their render's closure
+  const pageRef = useRef(page)
+  pageRef.current = page
+  const onLinkRef = useRef()
 
   useEffect(() => {
-    if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
-      fetchProducts();
-    } else {
-      setProducts([
-        { id: '1', name: 'Premium Car Shampoo', price: '1200', description: 'Deep foam cleaning formula', image: 'https://via.placeholder.com/280' },
-        { id: '2', name: 'Microfiber Cleaning Cloth', price: '450', description: 'Scratch-free ultra absorbent towel', image: 'https://via.placeholder.com/280' }
-      ]);
-      setLoadingProducts(false);
-    }
-  }, []);
+    fetchProducts()
+      .then((rows) => {
+        setProducts(normalizeProducts(rows))
+        setProductsState('ready')
+      })
+      .catch((err) => {
+        console.error('Failed to load products:', err)
+        setProductsState('error')
+      })
+  }, [])
 
-  useScrollReveal();
-
-  const openDetail = (service, brand) => {
-    setDetailService(service);
-    setDetailBrand(brand);
-    setDetailOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeDetail = () => {
-    setDetailOpen(false);
-    document.body.style.overflow = '';
-  };
-
-  const openBookWithService = (serviceName = '') => {
-    setSelectedBookingService(serviceName);
-    setBookOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeBook = () => {
-    setBookOpen(false);
-    setSelectedBookingService('');
-    document.body.style.overflow = '';
-  };
-
-  // Cart Functions
-  const handleAddToCart = (product) => {
-    setCartItems((prev) => {
-      const existingIndex = prev.findIndex((item) => String(item.id) === String(product.id));
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity = (updated[existingIndex].quantity || 1) + 1;
-        return updated;
+  // hash routing: `#products` is the shop, anything else is home
+  useEffect(() => {
+    const onHash = () => {
+      const p = pageFromHash()
+      if (p !== pageRef.current) {
+        setPage(p)
+        window.scrollTo(0, 0)
       }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-  };
-
-  const handleRemoveFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => String(item.id) !== String(productId)));
-  };
-
-  const handleUpdateQuantity = (productId, newQty) => {
-    if (newQty <= 0) {
-      handleRemoveFromCart(productId);
-      return;
     }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        String(item.id) === String(productId) ? { ...item, quantity: newQty } : item
-      )
-    );
-  };
-
-  const handleProceedToCheckout = () => {
-    setCurrentPage('checkout');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleCompleteOrder = async (customerData) => {
-    const orderId = 'AZ-' + Math.floor(100000 + Math.random() * 900000);
-    const totalPrice = cartItems.reduce(
-      (acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1),
-      0
-    );
-    const itemsSummary = cartItems
-      .map((item) => `${item.name || item.title} (x${item.quantity || 1})`)
-      .join(', ');
-
-    const newOrder = {
-      action: 'createOrder',
-      orderId,
-      name: customerData.name,
-      address: customerData.address,
-      phone: customerData.phone,
-      items: itemsSummary,
-      totalPrice
-    };
-
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        redirect: 'follow',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(newOrder),
-      });
-    } catch (err) {
-      console.error('Error saving order to backend:', err);
+    window.addEventListener('popstate', onHash)
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      window.removeEventListener('popstate', onHash)
+      window.removeEventListener('hashchange', onHash)
     }
+  }, [])
 
-    setOrderCompletedData({ orderId, name: customerData.name });
-    setCartItems([]);
-  };
-
-  const handleCloseThanksPopup = () => {
-    setOrderCompletedData(null);
-    setCurrentPage('main');
-  };
-
-  const handlePageNav = (page) => {
-    if (page === 'products') {
-      setCurrentPage('products-page');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      setCurrentPage('main');
-      setActivePage(page);
+  // every overlay locks page scroll; Escape closes the top-most one
+  const overlay = order !== null || pdetail || book !== null || detail || cartOpen
+  useEffect(() => {
+    if (!overlay) return
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.documentElement.style.overflow = ''
     }
-  };
+  }, [overlay])
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      if (order) setOrder(null)
+      else if (cartOpen) setCartOpen(false)
+      else if (pdetail) setPdetail(null)
+      else if (book !== null) setBook(null)
+      else if (detail) setDetail(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [order, cartOpen, pdetail, book, detail])
 
-  // Render Checkout Page View
-  if (currentPage === 'checkout') {
-    return (
-      <CheckoutPage
-        cartItems={cartItems}
-        onBack={() => setCurrentPage('main')}
-        onCompleteOrder={handleCompleteOrder}
-        orderCompletedData={orderCompletedData}
-        onCloseThanksPopup={handleCloseThanksPopup}
-      />
-    );
+  const goPage = useCallback((next, keepScroll) => {
+    if (pageRef.current !== next) {
+      try {
+        history.pushState(null, '', next === 'products' ? '#products' : window.location.pathname + window.location.search)
+      } catch (_) {}
+    }
+    setPage(next)
+    setCartOpen(false)
+    if (!keepScroll) window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [])
+
+  const skipSvc = () => setSvcSkip((n) => n + 1)
+
+  // after switching back to home, wait for the sections to mount before acting
+  const whenHome = (fn) => {
+    if (pageRef.current !== 'home') {
+      goPage('home', true)
+      setTimeout(fn, 120)
+    } else fn()
   }
 
-  // Render Dedicated Products Page View
-  if (currentPage === 'products-page') {
-    return (
-      <>
-        <Topbar />
-        <Nav
-          onBookClick={() => openBookWithService('')}
-          onPageNav={handlePageNav}
-          cartItems={cartItems}
-          onRemoveFromCart={handleRemoveFromCart}
-          onUpdateQuantity={handleUpdateQuantity}
-          onProceedToCheckout={handleProceedToCheckout}
-        />
-        <ProductsPage
-          products={products}
-          loadingProducts={loadingProducts}
-          onAddToCart={handleAddToCart}
-          onBack={() => setCurrentPage('main')}
-        />
-        <Footer />
-        <WAFloat />
-      </>
-    );
+  const onLink = (label) => {
+    if (!['Process', 'Reviews', 'FAQ', 'Contact', 'Home'].includes(label)) skipSvc()
+    if (label === 'Products') return goPage('products')
+    if (pageRef.current !== 'home') {
+      goPage('home', true)
+      return setTimeout(() => onLinkRef.current(label), 80)
+    }
+    if (label === 'Services') return scrollToId('services')
+    const t = { 'HOME SERVICES': 'home', 'CAR DETAILING': 'car', LAUNDRY: 'laundry' }[label]
+    if (t) {
+      setTab(t)
+      return scrollToId('services')
+    }
+    const id = { Process: 'process', Reviews: 'reviews', FAQ: 'faq', Contact: 'contact' }[label]
+    if (id) return scrollToId(id)
+    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+  }
+  onLinkRef.current = onLink
+
+  // footer "Our Services" links: pick the tab, then scroll to + flash the matching card
+  const onServiceLink = (label) => {
+    const nm = label.trim().toLowerCase()
+    let t = nm === 'car detailing' ? 'car' : nm === 'laundry' ? 'laundry' : null
+    let card = null
+    if (!t)
+      for (const k of ['home', 'car', 'laundry'])
+        if (SERVICES[k].some((x) => x.name.toLowerCase() === nm)) {
+          t = k
+          card = nm
+          break
+        }
+    if (!t) return
+    whenHome(() => {
+      skipSvc()
+      setTab(t)
+      setDetail(null)
+      if (card) revealService(card)
+      else scrollToId('services')
+    })
+  }
+  const onSectionLink = (id) => whenHome(() => scrollToId(id))
+
+  // ---- cart ----
+  const addToCart = (p) => {
+    if (!p.price) return // "Price on WhatsApp" products never enter the cart
+    setCart((c) =>
+      c.some((i) => i.id === p.key)
+        ? c.map((i) => (i.id === p.key ? { ...i, quantity: i.quantity + 1 } : i))
+        : [...c, { id: p.key, name: p.name, image: p.image, price: p.price, quantity: 1 }]
+    )
+    setCartOpen(false)
+    setOrder('form')
+    track('AddToCart', { content_type: 'product', content_name: p.name, value: p.price })
+  }
+  const setQty = (id, n) =>
+    setCart((c) => (n <= 0 ? c.filter((i) => i.id !== id) : c.map((i) => (i.id === id ? { ...i, quantity: n } : i))))
+
+  const cartCount = cart.reduce((a, i) => a + i.quantity, 0)
+  const openCart = () => (cart.length ? setOrder('form') : setCartOpen(true))
+  const checkout = () => {
+    setCartOpen(false)
+    setOrder(cart.length ? 'form' : null)
   }
 
-  // Render Main Homepage View
+  // ---- submissions (both resolve on success and throw on a network failure; the forms show the error) ----
+  const submitBook = async (data) => {
+    await postBooking({
+      name: data.name,
+      phone: data.phone,
+      service: data.service,
+      area: data.area || '',
+      preferred_time: data.preferred_time || '',
+      message: data.message || '',
+    })
+    track('Lead', { content_name: data.service })
+  }
+  const submitOrder = async (form) => {
+    const payload = buildOrder(cart, form, newOrderId())
+    await postOrder(payload)
+    track('Purchase', { content_type: 'product', content_name: payload.items, value: payload.totalPrice })
+    setCart([])
+    setOrder('sent')
+  }
+
+  const orderOpen = order === 'sent' || (order === 'form' && cart.length > 0)
+  const home = page === 'home'
+
   return (
-    <>
-      <Topbar />
-      <Nav
-        onBookClick={() => openBookWithService('')}
-        onPageNav={handlePageNav}
-        cartItems={cartItems}
-        onRemoveFromCart={handleRemoveFromCart}
-        onUpdateQuantity={handleUpdateQuantity}
-        onProceedToCheckout={handleProceedToCheckout}
-      />
+    <div
+      data-page-root="1"
+      style={{ '--topbar-h': '36px', background: 'var(--dark)', color: 'var(--white)', fontFamily: 'var(--font-body)', overflowX: 'clip', position: 'relative' }}
+    >
+      {!reduced && !preDone && <Preloader seconds={1.2 * (window.innerWidth <= 768 ? 0.85 : 1)} onDone={() => setPreDone(true)} />}
+      <ScrollProgress />
 
-      <Hero 
-        onBookClick={() => openBookWithService('')} 
-        onExploreProducts={() => handlePageNav('products')}
-      />
-      <TrustStrip />
-      <Services
-        activePage={activePage}
-        onPageChange={setActivePage}
-        onDetailOpen={openDetail}
-        onBookService={(svcName) => openBookWithService(svcName)}
-        sheetProducts={products}
-        loadingProducts={loadingProducts}
-        onAddToCart={handleAddToCart}
-      />
-      <Gallery />
-      <Process />
-      <WhyUs />
-      <Counters />
-      <Reviews />
-      <Contact />
-      <Footer />
+      <div data-screen-label="01 Topbar + Nav" id="top" style={{ position: 'relative', zIndex: 'auto' }}>
+        <Topbar />
+        <Nav cartCount={cartCount} onBook={() => setBook('')} onCart={openCart} onLink={onLink} />
+      </div>
+
+      {home && (
+        <>
+          <Hero onBook={() => setBook('')} onExplore={() => { skipSvc(); scrollToId('services') }} onProducts={() => onLink('Products')} />
+          <TrustStrip />
+          <Services tab={tab} onTab={setTab} skipToken={svcSkip} onOpen={setDetail} onBook={setBook} />
+          <Gallery />
+          <Process />
+          <Faq />
+          <Counters />
+          <Reviews />
+          <Contact catalog={CATALOG} onSubmit={submitBook} />
+        </>
+      )}
+      {!home && (
+        <Shop products={products} state={productsState} onOpen={setPdetail} onAdd={addToCart} onHome={() => goPage('home')} />
+      )}
+
+      <Footer onServiceLink={onServiceLink} onSectionLink={onSectionLink} />
+
+      <BackToTop />
       <WAFloat />
-      <BookModal 
-        open={bookOpen} 
-        onClose={closeBook} 
-        selectedService={selectedBookingService} 
-      />
-      <DetailModal 
-        open={detailOpen} 
-        onClose={closeDetail} 
-        service={detailService} 
-        brand={detailBrand} 
-      />
-    </>
-  );
+
+      {book !== null && <BookingModal selected={book} catalog={CATALOG} onSubmit={submitBook} onClose={() => setBook(null)} />}
+      {orderOpen && (
+        <OrderSheet
+          cart={cart}
+          sent={order === 'sent'}
+          subtotal={subtotal(cart)}
+          onQty={setQty}
+          onRemove={(id) => setQty(id, 0)}
+          onClose={() => setOrder(null)}
+          onSubmit={submitOrder}
+        />
+      )}
+      {pdetail && (
+        <ProductDetail
+          product={pdetail}
+          onClose={() => setPdetail(null)}
+          onAdd={() => {
+            const p = pdetail
+            setPdetail(null)
+            addToCart(p)
+          }}
+        />
+      )}
+      {detail && (
+        <ServiceDetail
+          service={detail}
+          onClose={() => setDetail(null)}
+          onBook={() => {
+            setBook(detail.key)
+            setDetail(null)
+          }}
+        />
+      )}
+      <CartDrawer open={cartOpen} items={cart} onClose={() => setCartOpen(false)} onQty={setQty} onRemove={(id) => setQty(id, 0)} onCheckout={checkout} />
+    </div>
+  )
 }

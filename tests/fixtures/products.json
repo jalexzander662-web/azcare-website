@@ -1,0 +1,229 @@
+{
+ "status": "success",
+ "data": [
+  {
+   "id": "",
+   "name": "Sofa/Carpet Mattress/Curtain Cleaner",
+   "price": "",
+   "image": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9S4XNZujBbe9ZVfLLNsVfCmZJV1V90HCq8kjfzHySaId1soWKELF1J0dTiUDn3ThhSwsOFbA4hg40yIgUK7Ua4WCNUrmkFtaM8Re6Li-Jig3qZorAiCb1UoD5F_2AJgvlZQ78oBNC9ajyUs=s680-w680-h510-rw",
+   "description": "Foam Based - Cleans, Removes Stains & Freshens. Deep foam cleaning, removes tough stains, safe on fabric & upholstery (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Car Care",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.41%20AM.jpeg",
+   "description": "Professional Auto Detailing - Clean, Protect & Enhance. Specialized formula for automotive surfaces and detailing (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Floor Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.30%20AM.jpeg",
+   "description": "Floral Fresh - Cleans, Shines & Freshens. Removes dirt, kills germs, and provides long-lasting freshness (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "All-Purpose Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.31%20AM.jpeg",
+   "description": "Fresh Lemon - Cleans, Disinfects & Freshens. Removes dirt & grease, kills germs, and safe on multiple surfaces (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Disinfectant Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.32%20AM%20(1).jpeg",
+   "description": "Fresh Clean Scent - Cleans, Disinfects & Freshens. Kills germs, removes dirt & bacteria, with long-lasting freshness (1 Litre).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Multi-Surface Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.32%20AM.jpeg",
+   "description": "Cleans, Removes Grease & Freshens. Safe on kitchen, wood, tiles, and glass surfaces with long-lasting freshness (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Toilet Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.33%20AM.jpeg",
+   "description": "Power Clean - Cleans, Removes Stains & Kills Germs. Powerful formula for deep cleaning and removing tough stains (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Kitchen Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.35%20AM.jpeg",
+   "description": "Lemon Fresh - Cleans, Removes Grease & Freshens. Tough on grease, kills germs, and leaves long-lasting freshness (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Furniture/Wood Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.39%20AM%20(1).jpeg",
+   "description": "Lemon Fresh - Cleans, Nourishes & Restores Shine. Removes dust & dirt, nourishes wood, and gives long-lasting shine (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Glass/Mirror Cleaner",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.39%20AM.jpeg",
+   "description": "Streak Free Shine - Cleans, Streak Free & Crystal Shine. Removes dust & smudges, safe on glass & mirrors (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Car Exterior Cleaner1500",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.45%20AM%20(1).jpeg",
+   "description": "Car Wash Shampoo - Removes Dirt, Rich Foam & Safe on Paint. Specialized formula for automotive exterior surfaces (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Dish Washer950",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.45%20AM.jpeg",
+   "description": "Powerful Grease Removal - Sparkling Clean & Fresh Fragrance. Tough on grease, sparkling dishes, and fresh fragrance (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Tile Cleaner1800",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.46%20AM%20(1).jpeg",
+   "description": "Citrus Fresh - Cleans, Removes Stains & Restores Shine. Removes tough stains, deep cleans, and restores natural shine (1 Litre).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Bathroom Cleaner1100",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.46%20AM.jpeg",
+   "description": "Ocean Fresh - Cleans, Removes Stains & Kills Germs. Removes tough stains, kills germs, and provides long-lasting freshness (500 ml).",
+   "": "Car Exterior Cleaner1500"
+  },
+  {
+   "id": "",
+   "name": "Hand Wash1000",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.42%20AM.jpeg",
+   "description": "Gentle on Skin - Cleans, Moisturizes & Protects. Deep cleansing, moisturizes skin, and protects from germs (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Fabric Softener600",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.43%20AM%20(1).jpeg",
+   "description": "Floral Fresh - Long Lasting Freshness. Soft fabrics, fresh fragrance, and reduces static (200 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Fabric Softener1100",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.43%20AM.jpeg",
+   "description": "Floral Fresh - Long Lasting Freshness. Soft fabrics, fresh fragrance, and reduces static (500 ml).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "Washing Powder1200",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.44%20AM%20(1).jpeg",
+   "description": "Deep Cleaning Power - Removes Tough Stains & Brightens Whites. Deep cleaning, brightens whites, and safe for everyday use (1 Kg).",
+   "": ""
+  },
+  {
+   "id": "",
+   "name": "White Phenyl1050",
+   "price": 788,
+   "image": "https://raw.githubusercontent.com/worksyedsaadmajid-svg/ERT/refs/heads/main/WhatsApp%20Image%202026-09-29%20at%2011.23.44%20AM.jpeg",
+   "description": "Powerful Floor Cleaner - Cleans, Disinfects & Freshens. Deep cleaning, disinfects surfaces, and long-lasting freshness (1 Ltr).",
+   "": ""
+  },
+  {
+   "id": 1,
+   "name": "2-in-1 Cleaner Pack",
+   "price": 566,
+   "image": "https://raw.githubusercontent.com/jalexzander662-web/azcare-website/refs/heads/main/public/Sale%20products/2%20Cleaner%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 2,
+   "name": "3 Products Bundle",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/3%20products%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 3,
+   "name": "8 Things Bundle",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/8%20Things%20%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 4,
+   "name": "Cleaning Brush Set",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Brush%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 5,
+   "name": "Car Wash Kit",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Car%20wash%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 6,
+   "name": "Multi-Surface Cleaner",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Cleaner%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 7,
+   "name": "Foam Cleaner",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Foam%20cleaner%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 8,
+   "name": "Cleaning Pack",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Pack%20sale.webp",
+   "description": "not have",
+   "": ""
+  },
+  {
+   "id": 9,
+   "name": "Premium Shampoo",
+   "price": 100,
+   "image": "https://www.azcare.pk/Sale%20products/Shampo%20sale.webp",
+   "description": "not have",
+   "": ""
+  }
+ ]
+}

@@ -1,0 +1,3 @@
+/* Drawer WhatsApp button: page.css only styles it at <=768px, but the drawer is also used up to 1024px. */
+.az-mobile__contact{display:contents}
+.az-mobile a.az-mc i{color:#25d366;margin-right:.6rem;font-size:1.25rem}
